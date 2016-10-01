@@ -1,0 +1,71 @@
+<script>
+    function singup() {
+        var msg   = $('#formx').serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://ldform/ajax/ajax/singup/',
+            data: msg,
+            success: function(data) {
+                $('#alert').html(data);
+            },
+            error:  function(xhr, str){
+                alert('Возникла ошибка: ' + xhr.responseCode);
+            }
+        });
+    }
+</script>
+<div class="row" xmlns="http://www.w3.org/1999/html">
+    <div class="col-md-12">
+        <h4 class="page-head-line">Регистрация </h4>
+
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h4> Регистрация facebook <strong> / </strong>Google :</h4>
+        <br />
+        <a href="index.html" class="btn btn-social btn-facebook">
+            <i class="fa fa-facebook"></i>&nbsp; Facebook профиль</a>
+        &nbsp;или&nbsp;
+        <a href="index.html" class="btn btn-social btn-google">
+            <i class="fa fa-google-plus"></i>&nbsp; Google профиль</a>
+        <hr />
+
+    </div>
+    <div class="col-md-6">
+
+        <h4>Или <strong>Создать профиль :</strong></h4>
+        <div class="alert alert-danger" id="alert" ></div>
+
+
+        <form  method="post" id="formx" action="javascript:void(null);" onsubmit="singup();showHide('alert');setTimeout(function(){$('.alert-success').fadeOut('fast')},5000);">
+
+        <div class="form-group">
+                <label for="login">Email</label>
+                <input type="text" id="login" name="login" class="form-control" >
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" class="form-control" >
+            </div>
+                    </div>
+                <div class="col-md-6">
+            <div class="form-group">
+                <label for="password">еще раз пароль</label>
+                <input type="password" id="RepPassword" name="RepPassword" class="form-control" >
+            </div>
+                    </div>
+                </div>
+            <hr />
+            <button type="submit" onsubmit="alert('submit!');return false" class="btn btn-info"><span class="glyphicon glyphicon-user"></span> &nbsp;Регистрация </button>&nbsp;
+        </form>
+    </div>
+
+</div>
+
+
+

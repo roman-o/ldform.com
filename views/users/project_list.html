@@ -1,0 +1,22 @@
+<div class="col-md-12">
+    <h1>Мои проэкты <a href="http://ldform/users/setting"><button class="btn btn-success" ><i class=" fa fa-plus "></i> создать</button></a></h1>
+</div>
+
+<div class="row">
+<table class="table table-striped table-bordered table-hover">
+
+    <tbody>
+<?php foreach ($data as $item) {?>
+    <tr>
+        <td><?= $item['id_progect'];?></td>
+        <td><small>проэкт:</small> <?= $item['progect_name'];?> </td>
+        <td><small>сайт:</small> <?= $item['progect_site'];?></td>
+        <td><small>статус:</small> <label class="label label-success">опубликовано</label></td>
+        <td><a href="">получить код</a> </td>
+        <td> <a href="http://ldform/users/setting/<?= $item['id_progect'];?>" class="btn btn-xs btn-default">редактировать</a> </td>
+    </tr>
+   <? }?>
+    </tbody>
+</table>
+</div>
+

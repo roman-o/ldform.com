@@ -1,0 +1,428 @@
+
+    <?php
+
+ //   print_r($_GET);
+    ?>
+
+
+<script type="text/javascript" language="javascript">
+
+
+    function call() {
+        var msg   = $('#formx').serialize();
+        var idprogect = '<?=$data['progect'][0]['id_progect'];?>';
+        var timemark = '<?=$data['progect'][0]['time_mark'];?>';
+        var formmark = '<?=$data['progect'][0]['form_mark'];?>';
+
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://ldform/ajax/ajax/setting/'+idprogect+'/'+timemark+'/'+formmark,
+            data: msg,
+            success: function(data) {
+                $('#alert').html('Данные успешно сохранены');
+             <?php
+                if(!$data['progect']){?>
+                window.location.href = "http://ldform/users/setting/"+data+'?message=проэкт создан';
+             <?}?>
+            },
+            error:  function(xhr, str){
+                alert('Возникла ошибка: ' + xhr.responseCode);
+            }
+        });
+    }
+</script>
+
+
+<script type="text/javascript">
+    /**
+     * Функция Скрывает/Показывает блок
+     * @author ox2.ru дизайн студия
+     **/
+    function showHide(element_id) {
+        //Если элемент с id-шником element_id существует
+        if (document.getElementById(element_id)) {
+            //Записываем ссылку на элемент в переменную obj
+            var obj = document.getElementById(element_id);
+            //Если css-свойство display не block, то:
+            if (obj.style.display != "block") {
+                obj.style.display = "block"; //Показываем элемент
+
+
+            }
+
+        }
+        //Если элемент с id-шником element_id не найден, то выводим сообщение
+        else alert("Элемент с id: " + element_id + " не найден!");
+    }
+    function delay(f, ms) {
+
+        return function() {
+            var savedThis = this;
+            var savedArgs = arguments;
+
+            setTimeout(function() {
+                f.apply(savedThis, savedArgs);
+            }, ms);
+        };
+
+    }
+
+
+    function hide_time(which,div_id) {
+        ma=document.getElementById(div_id);
+
+        if (which=="false") ma.style.display="block";
+        else ma.style.display="none";
+
+    }
+
+</script>
+
+<div class="alert alert-success" id="alert" style="display: none;">
+
+    <strong>Данные успешно сохранены</strong>
+</div>
+<?php
+if($_GET[message]){?>
+    <div class="alert alert-success"  style="display: block;">
+
+        <strong>Проэкт  успешно создан</strong>
+    </div>
+<? }?>
+
+<div class="row">
+    <div class="col-md-12">
+<div class="panel panel-default">
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-8">
+        <ul class="nav nav-tabs">
+            <li id="tab_1" class="<? if($_GET['tab'] == 'base' OR !$_GET['tab']){ echo 'active';}?>"><a  href="#base" data-toggle="tab">базовые</a>
+            </li>
+            <li id="tab_2" class="<? if($_GET['tab'] == 'messages'){ echo 'active';}?>"><a href="#messages" data-toggle="tab">способы получения</a>
+            </li>
+            <li id="tab_3" class="<? if($_GET['tab'] == 'look'){ echo 'active';}?>"><a href="#look" data-toggle="tab">внешний вид</a>
+            </li>
+
+            <li id="tab_4" class="<? if($_GET['tab'] == 'code'){ echo 'active';}?>"><a href="#code" data-toggle="tab">код для вставки</a>
+            </li>
+        </ul>
+                </div>
+            <div class="col-md-2">
+                <div class="progress progress-striped active">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                        <span class="sr-only">40% Complete (success)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <form  method="post" id="formx" action="javascript:void(null);" onsubmit="call();showHide('alert');setTimeout(function(){$('.alert-success').fadeOut('fast')},5000);">
+                <button  type="submit" class="btn btn-success"><i class=" fa fa-refresh "></i> сохранить</button>
+            </div>
+       </div>
+        <div class="tab-content">
+            <div class="tab-pane fade <? if($_GET['tab'] == 'base' OR !$_GET['tab'] ){ echo 'active in';}?>" id="base">
+                <h4>Базовые данные</h4>
+
+
+    <div class="col-md-4">
+                <div class="form-group">
+                    <label for="progect_name">Название проэкта</label>
+                    <form  method="post" id="formx" action="javascript:void(null);" onsubmit="call()">
+                    <input type="text" class="form-control" id="progect_name" name="progect_name" placeholder="Название проэкта" value="<? if($data['progect'][0]['progect_name']){echo $data['progect'][0]['progect_name']; }?>" />
+                </div>
+                <div class="form-group">
+                    <label for="progect_site">Сайт установки</label>
+                    <input type="text" class="form-control" id="progect_site" name="progect_site" placeholder="Сайт установки" value="<? if($data['progect'][0]['progect_site']){echo $data['progect'][0]['progect_site']; }?>" />
+                </div>
+    </div>
+                <div class="col-md-8" >
+                    <label for="">Сообщения отправлять</label><br>
+                    <input type="radio" style="width: 60px"  name="time_set" value="true" <? if($data['time_mark'][0]['work_day_from'] == '00:00:00' AND $data['time_mark'][0]['work_day_until'] == '00:00:00' AND $data['time_mark'][0]['saterday_day_from'] == '00:00:00' AND $data['time_mark'][0]['saterday_day_until'] == '00:00:00'  AND $data['time_mark'][0]['sunday_day_from'] == '00:00:00'  AND $data['time_mark'][0]['sunday_day_until'] == '00:00:00'){echo 'checked'; }?>  onClick="hide_time('true','time_setting');">круглосуточно
+                    <input type="radio" style="width: 60px"  name="time_set" value="false" <? if($data['time_mark'][0]['work_day_from'] != '00:00:00' OR $data['time_mark'][0]['work_day_until'] != '00:00:00' OR $data['time_mark'][0]['saterday_day_from'] != '00:00:00' OR $data['time_mark'][0]['saterday_day_until'] != '00:00:00'  OR $data['time_mark'][0]['sunday_day_from'] != '00:00:00'  OR $data['time_mark'][0]['sunday_day_until'] != '00:00:00'){echo 'checked'; }?> onClick="hide_time('false','time_setting');">настроить
+                    <div id="time_setting" style="display: <? if($data['time_mark'][0]['work_day_from'] == '00:00:00' AND $data['time_mark'][0]['work_day_until'] == '00:00:00' AND $data['time_mark'][0]['saterday_day_from'] == '00:00:00' AND $data['time_mark'][0]['saterday_day_until'] == '00:00:00'  AND $data['time_mark'][0]['sunday_day_from'] == '00:00:00'  AND $data['time_mark'][0]['sunday_day_until'] == '00:00:00'){echo 'none'; }else{echo 'block';}?>">
+                    <div class="col-md-9">
+            <div class="form-group">
+                <label>Часовой пояс</label>
+                <select class="form-control" id="time_zone" name="time_zone">
+                    <option <? if($data['time_mark'][0]['time_zone']=='-12'){ echo "selected";}?> value='-12'>(GMT -12:00) Эневеток, Кваджалейн</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-11'){ echo "selected";}?> value='-11'>(GMT -11:00) Остров Мидуэй, Самоа</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-10'){ echo "selected";}?> value='-10'>(GMT -10:00) Гавайи</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-9'){ echo "selected";}?> value='-9'>(GMT -9:00) Аляска</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-8'){ echo "selected";}?> value='-8'>(GMT -8:00) Тихоокеанское время (США и Канада), Тихуана</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-7'){ echo "selected";}?> value='-7'>(GMT -7:00) Горное время (США и Канада), Аризона</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-6'){ echo "selected";}?> value='-6'>(GMT -6:00) Центральное время (США и Канада), Мехико</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-5'){ echo "selected";}?> value='-5'>(GMT -5:00) Восточное время (США и Канада), Богота, Лима</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-4'){ echo "selected";}?> value='-4'>(GMT -4:00) Атлантическое время (Канада), Каракас, Ла Пас</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-3.3'){ echo "selected";}?> value='-3.3'>(GMT -3:30) Ньюфаундленд</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-3'){ echo "selected";}?> value='-3'>(GMT -3:00) Бразилия, Буэнос-Айрес, Джорджтаун</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-2'){ echo "selected";}?> value='-2'>(GMT -2:00) Среднеатлантическое время</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='-1'){ echo "selected";}?> value='-1'>(GMT -1:00) Азорские острова, острова Зелёного Мыса</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='0'){ echo "selected";}?> value='0'>(GMT) Дублин, Лондон, Лиссабон, Касабланка, Эдинбург</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='1'){ echo "selected";}?> value='1'>(GMT +1:00) Брюсель,Рим, Копенгаген, Мадрид, Париж, Берлин</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='2' OR !$data['time_mark'][0]['time_zone']){ echo "selected";}?>  value='2'>(GMT +2:00) Афины, Киев, Минск, Бухарест, Рига, Таллин</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='3'){ echo "selected";}?> value='3'>(GMT +3:00) Москва, Санкт-Петербург, Волгоград</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='3.3'){ echo "selected";}?> value='3.3'>(GMT +3:30) Тегеран</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='4'){ echo "selected";}?> value='4'>(GMT +4:00) Абу-Даби, Баку, Тбилиси, Ереван</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='4.3'){ echo "selected";}?> value='4.3'>(GMT +4:30) Кабул</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='5'){ echo "selected";}?> value='5'>(GMT +5:00) Екатеринбург, Исламабад, Карачи, Ташкент</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='5.5'){ echo "selected";}?> value='5.5'>(GMT +5:30) Мумбай, Калькутта, Мадрас, Нью-Дели</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='6'){ echo "selected";}?> value='6'>(GMT +6:00) Омск, Новосибирск, Алма-Ата, Астана</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='7'){ echo "selected";}?> value='7'>(GMT +7:00) Красноярск, Норильск, Бангкок, Ханой, Джакарта</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='8'){ echo "selected";}?> value='8'>(GMT +8:00) Иркутск, Пекин, Перт, Сингапур, Гонконг</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='9'){ echo "selected";}?> value='9'>(GMT +9:00) Якутск, Токио, Сеул, Осака, Саппоро</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='9.3'){ echo "selected";}?> value='9.3'>(GMT +9:30) Аделаида, Дарвин</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='10'){ echo "selected";}?> value='10'>(GMT +10:00) Владивосток, Восточная Австралия, Гуам</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='11'){ echo "selected";}?> value='11'>(GMT +11:00) Магадан, Сахалин, Соломоновы Острова</option>
+                    <option <? if($data['time_mark'][0]['time_zone']=='12'){ echo "selected";}?> value='12'>(GMT +12:00) Камчатка, Окленд, Уэллингтон, Фиджи</option>
+                </select>
+                  </div>
+
+                <div class="checkbox">
+                    <div class="col-md-6">
+                      <label>
+                        <input type="checkbox" value="" checked disabled/>
+                        Будние дни
+                       </label>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-control" id="work_day_from" name="work_day_from" style="width: 90px">
+                            <?php
+                            for ($i = 0; $i <= 24; $i++){
+                            if($i<10){$cnt="0".$i;}else{$cnt=$i;}
+                            ?>
+                            <option <? if($data['time_mark'][0]['work_day_from']==$cnt.':00:00'){ echo "selected";}?> value="<?=$cnt;?>:00:00"><?=$cnt;?>.00</option>
+                            <?php }?>
+                        </select>-
+                        <select class="form-control" id="work_day_until" name="work_day_until" style="width: 90px">
+                           <?php
+                            for ($i = 0; $i <= 24; $i++){
+                            if($i<10){$cnt="0".$i;}else{$cnt=$i;}
+                            ?>
+                            <option <? if($data['time_mark'][0]['work_day_until']==$cnt.':00:00'){ echo "selected";}?> value="<?=$cnt;?>:00:00"><?=$cnt;?>.00</option>
+                            <?php }?>
+                        </select>
+                         </div>
+
+                </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>В суботу работаем?</label><br>
+                                <input type="radio" style="width: 20px"  name="saterday_day" value="true" <? if($data['time_mark'][0]['saterday_day_from'] !='00:01:00' AND $data['time_mark'][0]['saterday_day_until'] !='00:01:00' ){echo 'checked';}?> onClick="hide_time('false','saterday_day');">да
+                                <input type="radio" style="width: 20px"  name="saterday_day" value="false" <? if($data['time_mark'][0]['saterday_day_from'] =='00:01:00' AND $data['time_mark'][0]['saterday_day_until'] =='00:01:00' OR (!$data['time_mark'][0]['saterday_day_until'] AND !$data['time_mark'][0]['saterday_day_until'])){echo 'checked';}?> onClick="hide_time('true','saterday_day');">нет
+
+
+
+                        </div>
+                        <div class="col-md-6" id="saterday_day" style="display: <? if($data['time_mark'][0]['saterday_day_from'] !='00:01:00' AND $data['time_mark'][0]['saterday_day_until'] !='00:01:00' ){echo 'block';}else{echo 'none';}?>">
+                            <br>
+                            <select class="form-control" id="saterday_day_from" name="saterday_day_from" style="width: 90px">
+                                <?php
+                                for ($i = 0; $i <= 24; $i++){
+                                if($i<10){$cnt="0".$i;}else{$cnt=$i;}
+                                ?>
+                                <option <? if($data['time_mark'][0]['saterday_day_from']==$cnt.':00:00'){ echo "selected";}?> value="<?=$cnt;?>:00:00"><?=$cnt;?>.00</option>
+                                <?php }?>
+                            </select>-
+                            <select class="form-control" id="saterday_day_until" name="saterday_day_until" style="width: 90px">
+                                <?php
+                                for ($i = 0; $i <= 24; $i++){
+                                if($i<10){$cnt="0".$i;}else{$cnt=$i;}
+                                ?>
+                                <option <? if($data['time_mark'][0]['saterday_day_until']==$cnt.':00:00'){ echo "selected";}?> value="<?=$cnt;?>:00:00"><?=$cnt;?>.00</option>
+                                <?php }?>
+
+
+                            </select>
+                           </div>
+
+</div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Воскресеньем работаем?</label><br>
+                                <input type="radio" style="width: 20px"  name="sunday_day" value="true" <? if($data['time_mark'][0]['sunday_day_from'] !='00:01:00' AND $data['time_mark'][0]['sunday_day_until'] !='00:01:00' ){echo 'checked';}?> onClick="hide_time('false','sunday_day');">да
+                                <input type="radio" style="width: 20px"  name="sunday_day" value="false" <? if($data['time_mark'][0]['sunday_day_from'] =='00:01:00' AND $data['time_mark'][0]['sunday_day_until'] =='00:01:00' OR (!$data['time_mark'][0]['sunday_day_until'] AND !$data['time_mark'][0]['sunday_day_from'])){echo 'checked';}?>  onClick="hide_time('true','sunday_day');">нет
+
+
+
+                            </div>
+                            <div class="col-md-6" id="sunday_day" style="display: <? if($data['time_mark'][0]['sunday_day_from'] !='00:01:00' AND $data['time_mark'][0]['sunday_day_until'] !='00:01:00' ){echo 'block';}else {echo 'none';}?>">
+                                <br>
+                                <select class="form-control" id="sunday_day_from" name="sunday_day_from" style="width: 90px">
+                                    <?php
+                                for ($i = 0; $i <= 24; $i++){
+                                if($i<10){$cnt="0".$i;}else{$cnt=$i;}
+                                ?>
+                                    <option <? if($data['time_mark'][0]['sunday_day_from']==$cnt.':00:00'){ echo "selected";}?> value="<?=$cnt;?>:00:00"><?=$cnt;?>.00</option>
+                                    <?php }?>
+
+
+                                </select>-
+                                <select class="form-control" id="sunday_day_until" name="sunday_day_until" style="width: 90px">
+                                    <?php
+                                for ($i = 0; $i <= 24; $i++){
+                                if($i<10){$cnt="0".$i;}else{$cnt=$i;}
+                                ?>
+                                    <option <? if($data['time_mark'][0]['sunday_day_until']==$cnt.':00:00'){ echo "selected";}?> value="<?=$cnt;?>:00:00"><?=$cnt;?>.00</option>
+                                    <?php }?>
+
+                                </select>
+                            </div>
+
+                        </div>
+
+</div>
+                    <div class="alert alert-info col-md-3">
+                        <p><strong>Важно:</strong><br> В неробочие время сообщения не приходят .</p></div>
+</div>
+            </div>
+                <div class="col-md-12"
+                <a href="#messages" onclick=" tab_2.setAttribute('class', 'active'); tab_1.setAttribute('class', '');" data-toggle="tab">
+                <button class="btn btn-default"><i class=" glyphicon glyphicon-arrow-right "></i> вперед</button></a>
+                </div>
+    </div>
+
+            <div class="tab-pane fade  <? if($_GET['tab'] == 'messages'){ echo 'active in';}?>" id="messages">
+
+
+                <div class="form-group">
+                    <label >Профили для принятия сообщений</label><br>
+                    <label >Ваш токен: <?=$data['token'][0]['tok'];?></label><br>
+                    <a  class="btn bg-primary" data-toggle="modal" data-target="#myModal"><i class=" fa fa-plus "></i> добавить профиль</a>
+                    <a href="#" class="btn btn-default"><i class=" fa fa-refresh "></i> обновить</a><br>
+                    <small> если Вы только что добавили профиль для принятия сообщений нажмите кнопку "обновить"</small>
+<br>
+
+
+
+
+
+
+                    <input type="checkbox" value="" checked/ ><img src="/webroot/img/fb.png" /> FB messenger: Peter<br>
+                    <input type="checkbox" value="" checked/>  <img src="/webroot/img/tl.png" /> Telegram: Peter<br>
+                    <input type="checkbox" value="" checked/>  <img src="/webroot/img/sl.png" /> Slack: Peter chat<br>
+                    <input type="checkbox" value="" checked/>  <img src="/webroot/img/vk.png" /> Vk.com: Peter<br>
+                    <input type="checkbox" value="" checked/>  <img src="/webroot/img/email.png" /> email: Peter@gmail.com<br>
+                </div>
+                   <a href="#base" onclick=" tab_1.setAttribute('class', 'active'); tab_2.setAttribute('class', '');" data-toggle="tab">
+                   <button class="btn btn-default"><i class=" glyphicon glyphicon-arrow-left "></i> назад</button></a>
+                   <a href="#look" onclick=" tab_3.setAttribute('class', 'active'); tab_2.setAttribute('class', '');" data-toggle="tab">
+                       <button class="btn btn-default"><i class=" glyphicon glyphicon-arrow-right "></i> вперед</button></a>
+                 </div>
+            <div class="tab-pane fade  <? if($_GET['tab'] == 'look'){ echo 'active in';}?>" id="look">
+                <h3>Внешний вид</h3>
+                <div class="row">
+                    <div class="col-md-8">
+                <div class="form-group">
+                    <h4 >Основной цвет (кнопки)
+                    <input style="
+    width: 20%; height: 34px;    padding: 6px 12px;    font-size: 14px;    line-height: 1.42857143;    color: #555;    background-color: #fff;    background-image: none;    border: 1px solid #ccc;    border-radius: 4px;   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+" id="mycolor" name="mycolor" type="text" value="#ed008c" class="iColorPicker" /></h4>
+                </div>
+                        </div>
+                        <div class="col-md-4">
+                <a href="#" class="btn btn-info">Просмотреть</a>
+                    </div>
+                    </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                <div class="form-group">
+                    <label for="title">Заголовок формы</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="например: 'Заказать обратный звонок'" />
+                </div>
+                <div class="form-group">
+                    <label for="preambula">Преамбула</label>
+                    <input type="text" class="form-control" id="preambula" name="preambula" placeholder="например: 'Наш менеджер свяжется с Вами'" />
+                </div>
+                </div>
+                    <div class="col-md-4">
+                <div class="form-group">
+                    <label for="button">Текст кнопки отправки</label>
+                    <input type="text" class="form-control" id="button" name="button" placeholder="например: 'Перезвоните мне'" />
+                </div>
+                <div class="form-group">
+                    <label for="success">Текст при успешной отправке  </label>
+                    <input type="text" class="form-control" id="success" name="success" placeholder="например: 'запрос успешно отправлен'" />
+                </div>
+                </div>
+                    <div class="col-md-4">
+                <div class="form-group">
+                    <label for="foto_text">Подпись под фото конт.лица  </label>
+                    <input type="text" class="form-control" id="foto_text" name="foto_text" placeholder="например: 'Василий,менеджер по продажам'" />
+                </div>
+                <div class="form-group">
+                    <label for="foto">Загрузить фото конт.лица </label>
+                    <input type="file" class="form-control" id="foto" name="foto"  />
+                </div>
+                </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Поле "имя"
+                            </div>
+                            <div class="panel-body">
+                                <input type="checkbox"  id="name" name="name" checked/>   Да, активно<br>
+                                <input type="checkbox"  id="required_name" name="required_name"/>  Да, обязательно для заполнения<br>
+                                <i>Текст label</i>  <input type="text" class="form-control" id="form_name" name="form_name" placeholder="например: 'Введите Ваше 'имя'" />
+                                <i>Текст placeholder</i>  <input type="text" class="form-control" id="form_name_placeholder" name="form_name_placeholder" placeholder="например: 'Введите Ваше 'имя'" />
+                                <i>Текст валидации</i> <input type="text" class="form-control" id="validateName" name="validateName" placeholder="например: 'заполните поле 'имя'" />
+                            </div>
+                        </div>
+                        </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Поле "телефон"
+                            </div>
+                            <div class="panel-body">
+                    <input type="checkbox" id="tell" name="tell" checked/>   Да, активно<br>
+                    <input type="checkbox"  id="required_tell" name="required_tell" checked/>  Да, обязательно для заполнения<br>
+                    <i>Текст label</i>  <input type="text" class="form-control" id="form_tell" name="form_tell" placeholder="например: 'Введите Ваш 'телефон'" />
+                    <i>Текст placeholder</i>  <input type="text" class="form-control" id="form_tell_placeholder" name="form_tell_placeholder" placeholder="например: 'Введите Ваш 'телефон'" />
+                    <i>Текст валидации</i> <input type="text" class="form-control" id="validateTell" name="validateTell" placeholder="например: 'заполните поле 'телефон'" />
+</div>
+                </div>
+                        </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Поле "email"
+                            </div>
+                            <div class="panel-body">
+
+                    <input type="checkbox"  id="email" name="email" checked/>   Да, активно<br>
+                    <input type="checkbox"  id="required_email" name="required_email" checked/>  Да, обязательно для заполнения<br>
+                    <i>Текст label</i>  <input type="text" class="form-control" id="form_email" name="form_email" placeholder="например: 'Введите Ваш 'email'" />
+                    <i>Текст placeholder</i>  <input type="text" class="form-control" id="form_email_placeholder" name="form_email_placeholder" placeholder="например: 'Введите Ваш 'email'" />
+                    <i>Текст валидации</i> <input type="text" class="form-control" id="validateEmail" name="validateEmail" placeholder="например: 'заполните поле 'email'" />
+
+                            </div>
+                </div>
+                        </div>
+                </div>
+                </form>
+                <a href="#messages" onclick=" tab_2.setAttribute('class', 'active'); tab_3.setAttribute('class', '');" data-toggle="tab">
+                    <button class="btn btn-default"><i class=" glyphicon glyphicon-arrow-left "></i> назад</button></a>
+                <a href="#code" onclick=" tab_4.setAttribute('class', 'active'); tab_3.setAttribute('class', '');" data-toggle="tab">
+                    <button class="btn btn-default"><i class=" glyphicon glyphicon-arrow-right "></i> вперед</button></a>
+            </div>
+
+            <div class="tab-pane fade  <? if($_GET['tab'] == 'code'){ echo 'active in';}?>" id="code">
+                <h4>Settings Tab</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <a href="#look" onclick=" tab_3.setAttribute('class', 'active'); tab_4.setAttribute('class', '');" data-toggle="tab">
+                    <button class="btn btn-default"><i class=" glyphicon glyphicon-arrow-left "></i> назад</button></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
